@@ -1,4 +1,4 @@
-import Image from 'next/image'
+import Image from 'next/image';
 import {
   SearchIcon,
   PlusCircleIcon,
@@ -6,8 +6,8 @@ import {
   HeartIcon,
   PaperAirplaneIcon,
   MenuIcon,
-} from '@heroicons/react/outline'
-import { HomeIcon } from '@heroicons/react/solid'
+} from '@heroicons/react/outline';
+import { HomeIcon } from '@heroicons/react/solid';
 
 export default function Header() {
   return (
@@ -15,7 +15,7 @@ export default function Header() {
       <div className="flex max-w-6xl items-center justify-between bg-white px-5 lg:mx-auto">
         {/* Left */}
         <div>
-          <div className="relative hidden h-24 w-24 lg:inline-grid">
+          <div className="relative hidden h-14 w-40 items-center lg:flex">
             <Image
               src="https://links.papareact.com/ocw"
               alt="Instagram Logo"
@@ -53,8 +53,19 @@ export default function Header() {
           <PlusCircleIcon className="navBtn" />
           <UserGroupIcon className="navBtn" />
           <HeartIcon className="navBtn" />
+          <div className="inline-flex space-x-3">
+            <Image
+              className="cursor-pointer rounded-full"
+              height={40}
+              width={40}
+              objectFit="cover"
+              layout="fixed"
+              src="https://links.papareact.com/kxk"
+              alt="profile pic"
+            />
+          </div>
         </div>
       </div>
     </div>
-  )
+  );
 }
