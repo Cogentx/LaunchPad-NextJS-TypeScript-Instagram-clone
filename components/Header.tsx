@@ -11,7 +11,7 @@ import { HomeIcon } from '@heroicons/react/solid';
 
 export default function Header() {
   return (
-    <div>
+    <div className='shadow-sm border-b bg-white sticky top-0 z-50'>
       <div className="flex max-w-6xl items-center justify-between bg-white px-5 lg:mx-auto">
         {/* Left */}
         <div>
