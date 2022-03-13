@@ -21,6 +21,7 @@ export default function Header() {
               alt="Instagram Logo"
               layout="fill"
               objectFit="contain"
+              priority
             />
           </div>
           <div className="relative h-10 w-10 flex-shrink-0 cursor-pointer lg:hidden">
@@ -49,7 +50,10 @@ export default function Header() {
         <div className="flex items-center justify-end space-x-4">
           <HomeIcon className="navBtn" />
           <MenuIcon className="h-6 cursor-pointer md:hidden" />
-          <PaperAirplaneIcon className="navBtn" />
+          <div className="relative navBtn">
+            <PaperAirplaneIcon className="rotate-45" />
+            <div className="absolute text-xs text-white flex items-center justify-center rounded-full -top-2 -right-2 w-5 h-5 bg-red-500 animate-pulse">3</div>
+          </div>
           <PlusCircleIcon className="navBtn" />
           <UserGroupIcon className="navBtn" />
           <HeartIcon className="navBtn" />
