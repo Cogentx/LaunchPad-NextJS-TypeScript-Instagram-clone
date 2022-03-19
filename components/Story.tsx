@@ -1,12 +1,13 @@
-import { ContextualCard } from "@faker-js/faker/helpers"
-
 interface IProps {
-  profile:ContextualCard
+  img: string;
+  username: string;
 }
 
-export default function Story({profile}:IProps) {
-
+export default function Story({ img, username }: IProps) {
   return (
-    <div>{profile.name}</div>
-  )
+    <div>
+        <img src={img} alt="user avatar" className="rounded-full"/>
+        <p>{username}</p>
+    </div>
+  );
 }
