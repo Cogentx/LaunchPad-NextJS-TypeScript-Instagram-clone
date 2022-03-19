@@ -17,7 +17,7 @@ export default function () {
   }, []);
 
   return (
-    <div className='flex border border-gray-200 mt-8 space-x-2 rounded-sm bg-white overflow-x-scroll'>
+    <div className='flex border border-gray-200 mt-8 space-x-2 rounded-sm bg-white overflow-x-scroll p-6'>
       {suggestions.map((profile: ContextualCard, index) => (
         <Story key={index} img={profile.avatar} username={profile.username} />
       ))}
