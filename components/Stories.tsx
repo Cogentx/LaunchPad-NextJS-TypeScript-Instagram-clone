@@ -1,7 +1,10 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import faker from '@faker-js/faker';
+import { ContextualCard } from '@faker-js/faker/helpers';
 
 export default function () {
+  const [suggestions, setSuggestions] = useState<Array<any>>([]);
+
   // empty array means run once
   useEffect(() => {
     const suggestions = [
@@ -10,15 +13,15 @@ export default function () {
         id: i,
       })),
     ];
-    console.log(suggestions);
+    setSuggestions(suggestions);
   }, []);
 
   return (
     <div>
-      {/* Story */}
-      {/* Story */}
-      {/* Story */}
-      {/* Story */}
+      <h1>Stories</h1>
+      {suggestions.map((profile: ContextualCard) => {
+        console.log(profile);
+      })}
     </div>
   );
 }
