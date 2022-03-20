@@ -26,7 +26,14 @@ export default function Post({ id, username, userImg, img, caption }: IPost) {
       {/* Image */}
       <img src={img} alt="post image" className="w-full object-cover" />
       {/* Buttons */}
-
+      <div className="flex items-center justify-between px-5 pt-4">
+        <div className="flex items-center space-x-4">
+          <HeartIcon className="btn" />
+          <ChatIcon className="btn" />
+          <PaperAirplaneIcon className="btn" />
+        </div>
+        <BookmarkIcon className="btn" />
+      </div>
       {/* Caption */}
 
       {/* Comments */}
