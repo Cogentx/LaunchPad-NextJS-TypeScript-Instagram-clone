@@ -35,7 +35,10 @@ export default function Post({ id, username, userImg, img, caption }: IPost) {
         <BookmarkIcon className="btn" />
       </div>
       {/* Caption */}
-
+      <p className="p-5 truncate">
+        <span className='font-bold mr-1'>{username}</span>
+        {caption}
+      </p>
       {/* Comments */}
 
       {/* Input Box */}
