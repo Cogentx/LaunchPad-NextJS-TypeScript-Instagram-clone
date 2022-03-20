@@ -5,14 +5,14 @@ import Suggestions from './Suggestions';
 
 export default function Feed() {
   return (
-    <main className="mx-auto grid min-h-screen grid-cols-1 md:max-w-3xl md:grid-cols-2 xl:max-w-6xl xl:grid-cols-3 bg-green-100">
+    <main className="mx-auto grid min-h-screen grid-cols-1 md:max-w-3xl md:grid-cols-2 xl:max-w-6xl xl:grid-cols-3">
       <section className="col-span-1 md:col-span-2">
         <Stories />
         <Posts />
       </section>
 
-      <section className="hidden md:col-span-1 xl:inline-grid bg-gray-500">
-        <div className='fixed'>
+      <section className="hidden md:col-span-1 xl:inline-grid">
+        <div className="fixed">
           <MiniProfile />
           <Suggestions />
         </div>
