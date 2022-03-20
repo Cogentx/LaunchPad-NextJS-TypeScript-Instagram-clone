@@ -7,11 +7,13 @@ export default function Suggestions() {
 
   useEffect(() => {
     const suggestions = [...Array(5)].map((_, index) => ({
-      ...faker.helpers.contextualCard,
+      ...faker.helpers.contextualCard(),
       id: index,
     }));
+    console.log(suggestions);
+
     setSuggestions(suggestions);
-  }, [suggestions]);
+  }, []);
 
   return (
     <div className='mt-4 ml-10'>
@@ -20,8 +22,8 @@ export default function Suggestions() {
         <button className='text-gray-600 font-semibold cursor-pointer'>See All</button>
       </div>
 
-      {suggestions.map((suggestions, index) => (
-        <Suggestion key={index}/>
+      {suggestions.map((profile, index) => (
+        <Suggestion key={index} profile={profile}/>
       ))}
     </div>
   );
