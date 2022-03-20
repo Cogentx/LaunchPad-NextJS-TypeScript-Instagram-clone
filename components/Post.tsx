@@ -24,7 +24,7 @@ export default function Post({ id, username, userImg, img, caption }: IPost) {
         <DotsHorizontalIcon className="h-5" />
       </div>
       {/* Image */}
-
+      <img src={img} alt="post image" className="w-full object-cover" />
       {/* Buttons */}
 
       {/* Caption */}
