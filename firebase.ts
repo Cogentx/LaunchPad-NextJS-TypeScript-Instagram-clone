@@ -1,5 +1,4 @@
-import { initializeApp } from 'firebase/app';
-import { getAnalytics } from 'firebase/analytics';
+import { initializeApp, getApp, getApps } from 'firebase/app';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyDh4V2AGPzTOfAmK1ohE67or3jQ975DvQU',
@@ -12,6 +11,7 @@ const firebaseConfig = {
   measurementId: 'G-YZLCYWD7NC',
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+// Initialize Firebase with Singleton Pattern
+// - if firebase app already initialized use otherwise, initialize it
+const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+
