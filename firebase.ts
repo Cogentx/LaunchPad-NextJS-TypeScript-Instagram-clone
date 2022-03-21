@@ -1,4 +1,5 @@
 import { initializeApp, getApp, getApps } from 'firebase/app';
+import {getFirestore} from 'firebase/firestore'
 
 const firebaseConfig = {
   apiKey: 'AIzaSyDh4V2AGPzTOfAmK1ohE67or3jQ975DvQU',
@@ -14,4 +15,11 @@ const firebaseConfig = {
 // Initialize Firebase with Singleton Pattern
 // - if firebase app already initialized use otherwise, initialize it
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+const db = getFirestore(app);
+
+export {
+  app,
+  db,
+}
+
 
