@@ -1,4 +1,6 @@
+import Image from 'next/image';
 import { getProviders, signIn as signIntoProvider } from 'next-auth/react';
+import Header from '../../components/Header';
 
 interface IProps {
   providers: [
@@ -12,13 +14,20 @@ interface IProps {
 export default function SignIn({ providers }: IProps) {
   return (
     <>
-      {Object.values(providers).map((provider) => (
-        <div key={provider.name}>
-          <button onClick={() => signIntoProvider(provider.id)}>
-            Sign in with {provider.name}
-          </button>
+      <Header />
+      <div className='flex flex-col items-center mt-20'>
+        <div className="mt-40">
+          {Object.values(providers).map((provider) => (
+            <div key={provider.name}>
+              <button
+                onClick={() => signIntoProvider(provider.id)}
+              >
+                Sign in with {provider.name}
+              </button>
+            </div>
+          ))}
         </div>
-      ))}
+      </div>
     </>
   );
 }
