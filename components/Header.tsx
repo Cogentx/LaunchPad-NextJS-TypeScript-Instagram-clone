@@ -8,10 +8,14 @@ import {
   MenuIcon,
 } from '@heroicons/react/outline';
 import { HomeIcon } from '@heroicons/react/solid';
+import { signIn, signOut, useSession } from 'next-auth/react';
 
 export default function Header() {
+  // 'data' comes back from 'useSession()' | rename to 'session'
+  const { data: session } = useSession();
+
   return (
-    <div className='shadow-sm border-b bg-white sticky top-0 z-50'>
+    <div className="sticky top-0 z-50 border-b bg-white shadow-sm">
       <div className="flex max-w-6xl items-center justify-between bg-white px-5 lg:mx-auto">
         {/* Left */}
         <div>
@@ -50,24 +54,34 @@ export default function Header() {
         <div className="flex items-center justify-end space-x-4">
           <HomeIcon className="navBtn" />
           <MenuIcon className="h-6 cursor-pointer md:hidden" />
-          <div className="relative navBtn">
-            <PaperAirplaneIcon className="rotate-45" />
-            <div className="absolute text-xs text-white flex items-center justify-center rounded-full -top-2 -right-2 w-5 h-5 bg-red-500 animate-pulse">3</div>
-          </div>
-          <PlusCircleIcon className="navBtn" />
-          <UserGroupIcon className="navBtn" />
-          <HeartIcon className="navBtn" />
-          <div className="inline-flex space-x-3">
-            <Image
-              className="cursor-pointer rounded-full"
-              height={40}
-              width={40}
-              objectFit="cover"
-              layout="fixed"
-              src="https://links.papareact.com/kxk"
-              alt="profile pic"
-            />
-          </div>
+          {session ? (
+            <>
+              <div className="navBtn relative">
+                <PaperAirplaneIcon className="rotate-45" />
+                <div className="absolute -top-2 -right-2 flex h-5 w-5 animate-pulse items-center justify-center rounded-full bg-red-500 text-xs text-white">
+                  3
+                </div>
+              </div>
+              <PlusCircleIcon className="navBtn" />
+              <UserGroupIcon className="navBtn" />
+              <HeartIcon className="navBtn" />
+              <div className="inline-flex space-x-3">
+                {session?.user?.image && (
+                  // Next Image requires known image URLs
+                  <img
+                    onClick={() => signOut()}
+                    className="h-10 w-10 cursor-pointer rounded-full"
+                    src={session?.user?.image}
+                    alt="profile pic"
+                  />
+                )}
+              </div>
+            </>
+          ) : (
+            <div>
+              <button onClick={() => signIn()}>Sign In</button>
+            </div>
+          )}
         </div>
       </div>
     </div>
