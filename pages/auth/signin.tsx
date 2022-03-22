@@ -15,7 +15,21 @@ export default function SignIn({ providers }: IProps) {
   return (
     <>
       <Header />
-      <div className='flex flex-col items-center mt-20'>
+      <div className="flex flex-col items-center justify-center py-2 px-14 min-h-screen -mt-56">
+        <div className="relative flex h-28 w-80 items-center">
+          <Image
+            src="https://links.papareact.com/ocw"
+            alt="Instagram Logo"
+            layout="fill"
+            objectFit="contain"
+            priority
+          />
+        </div>
+
+        <p className="font-xs italic">
+          Instagram Clone built for Educational Purposes Only
+        </p>
+
         <div className="mt-40">
           {Object.values(providers).map((provider) => (
             <div key={provider.name}>
