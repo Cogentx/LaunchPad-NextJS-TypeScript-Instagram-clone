@@ -20,6 +20,7 @@ export default function SignIn({ providers }: IProps) {
           {Object.values(providers).map((provider) => (
             <div key={provider.name}>
               <button
+                className="rounded-lg bg-blue-500 p-3 text-white"
                 onClick={() => signIntoProvider(provider.id)}
               >
                 Sign in with {provider.name}
