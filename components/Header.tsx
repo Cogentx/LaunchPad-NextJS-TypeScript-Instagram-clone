@@ -67,13 +67,10 @@ export default function Header() {
               <HeartIcon className="navBtn" />
               <div className="inline-flex space-x-3">
                 {session?.user?.image && (
-                  <Image
+                  // Next Image requires known image URLs
+                  <img
                     onClick={() => signOut()}
-                    className="cursor-pointer rounded-full"
-                    height={40}
-                    width={40}
-                    objectFit="cover"
-                    layout="fixed"
+                    className="h-10 w-10 cursor-pointer rounded-full"
                     src={session?.user?.image}
                     alt="profile pic"
                   />
@@ -82,7 +79,7 @@ export default function Header() {
             </>
           ) : (
             <div>
-              <button onClick={()=>signIn()}>Sign In</button>
+              <button onClick={() => signIn()}>Sign In</button>
             </div>
           )}
         </div>
