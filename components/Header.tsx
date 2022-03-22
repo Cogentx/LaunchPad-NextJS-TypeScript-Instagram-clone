@@ -8,12 +8,11 @@ import {
   MenuIcon,
 } from '@heroicons/react/outline';
 import { HomeIcon } from '@heroicons/react/solid';
-import { useSession } from 'next-auth/react';
+import { signIn, signOut, useSession } from 'next-auth/react';
 
 export default function Header() {
   // 'data' comes back from 'useSession()' | rename to 'session'
   const { data: session } = useSession();
-  console.log(session);
 
   return (
     <div className="sticky top-0 z-50 border-b bg-white shadow-sm">
@@ -55,26 +54,37 @@ export default function Header() {
         <div className="flex items-center justify-end space-x-4">
           <HomeIcon className="navBtn" />
           <MenuIcon className="h-6 cursor-pointer md:hidden" />
-          <div className="navBtn relative">
-            <PaperAirplaneIcon className="rotate-45" />
-            <div className="absolute -top-2 -right-2 flex h-5 w-5 animate-pulse items-center justify-center rounded-full bg-red-500 text-xs text-white">
-              3
+          {session ? (
+            <>
+              <div className="navBtn relative">
+                <PaperAirplaneIcon className="rotate-45" />
+                <div className="absolute -top-2 -right-2 flex h-5 w-5 animate-pulse items-center justify-center rounded-full bg-red-500 text-xs text-white">
+                  3
+                </div>
+              </div>
+              <PlusCircleIcon className="navBtn" />
+              <UserGroupIcon className="navBtn" />
+              <HeartIcon className="navBtn" />
+              <div className="inline-flex space-x-3">
+                {session?.user?.image && (
+                  <Image
+                    onClick={() => signOut()}
+                    className="cursor-pointer rounded-full"
+                    height={40}
+                    width={40}
+                    objectFit="cover"
+                    layout="fixed"
+                    src={session?.user?.image}
+                    alt="profile pic"
+                  />
+                )}
+              </div>
+            </>
+          ) : (
+            <div>
+              <button onClick={()=>signIn()}>Sign In</button>
             </div>
-          </div>
-          <PlusCircleIcon className="navBtn" />
-          <UserGroupIcon className="navBtn" />
-          <HeartIcon className="navBtn" />
-          <div className="inline-flex space-x-3">
-            <Image
-              className="cursor-pointer rounded-full"
-              height={40}
-              width={40}
-              objectFit="cover"
-              layout="fixed"
-              src="https://links.papareact.com/kxk"
-              alt="profile pic"
-            />
-          </div>
+          )}
         </div>
       </div>
     </div>
