@@ -33,9 +33,10 @@ export default function SignIn({ providers }: IProps) {
         <div className="mt-40">
           {Object.values(providers).map((provider) => (
             <div key={provider.name}>
+              {/* signIntoProvider takes a callbackUrl as second param | '/' goes to Home Page */}
               <button
                 className="rounded-lg bg-blue-500 p-3 text-white"
-                onClick={() => signIntoProvider(provider.id)}
+                onClick={() => signIntoProvider(provider.id,{callbackUrl:'/'})}
               >
                 Sign in with {provider.name}
               </button>
