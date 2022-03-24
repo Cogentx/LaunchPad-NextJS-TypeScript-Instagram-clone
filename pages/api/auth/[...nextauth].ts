@@ -1,4 +1,5 @@
 import NextAuth from 'next-auth';
+import type { Session } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 
 export default NextAuth({
@@ -13,10 +14,19 @@ export default NextAuth({
   pages: {
     signIn: '/auth/signin',
   },
-  // default NextAuth sign-in page can be themed
-  // theme: {
-  //   logo: 'https://links.papareact.com/sq0',
-  //   brandColor: '#f13287',
-  //   colorScheme: 'auto',
-  // },
+  callbacks: {
+    async session({ session, token, user }) {
+      console.log(session);
+      return session;
+    },
+  },
+  // callbacks: {
+  //   async session({
+  //     session({session, token, user}) {
+  //       console.log(session)
+  //       session.user.username = session.user.name.split(" ").join("").toLocaleLowerCase();
+  //       return session;
+  //     }
+  //   });
+  // }
 });

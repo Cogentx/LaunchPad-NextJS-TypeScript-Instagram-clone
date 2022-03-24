@@ -1,4 +1,4 @@
-import type { IPost } from '../custom-types';
+import type { IPost } from '../types/custom-types';
 import Post from './Post';
 
 export default function Posts() {
