@@ -10,7 +10,7 @@ declare module 'next-auth' {
     user: {
       uid?: string;
       username?: string;
-      name: string;
+      name?: string;
     };
   }
 }

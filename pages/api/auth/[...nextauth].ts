@@ -22,7 +22,7 @@ export default NextAuth({
   },
   callbacks: {
     async session({ session, token, user }: ISessionCallback) {
-      session.user.username = session.user.name
+      session.user.username = (!session?.user?.name) ? session.user.username : session?.user?.name
         .split(' ')
         .join('')
         .toLocaleLowerCase();
