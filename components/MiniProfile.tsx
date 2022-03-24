@@ -3,7 +3,6 @@ import React from 'react';
 
 export default function MiniProfile() {
   const { data: session } = useSession();
-  console.log('MiniProfile',session);
 
   return (
     <div className="mt-14 ml-10 flex items-center justify-between">
