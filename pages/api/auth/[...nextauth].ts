@@ -1,6 +1,12 @@
 import NextAuth from 'next-auth';
-import type { Session } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
+import type { Session, User, JWT } from '../../../types/next-auth';
+
+interface ISessionCallback {
+  session: Session;
+  user: User;
+  token: JWT;
+}
 
 export default NextAuth({
   // Configure one or more authentication providers
@@ -15,18 +21,16 @@ export default NextAuth({
     signIn: '/auth/signin',
   },
   callbacks: {
-    async session({ session, token, user }) {
-      console.log(session);
+    async session({ session, token, user }: ISessionCallback) {
+      session.user.username = session.user.name
+        .split(' ')
+        .join('')
+        .toLocaleLowerCase();
+
+      // attach Google UID (stored in token sub)
+      session.user.uid = token.sub;
+
       return session;
     },
   },
-  // callbacks: {
-  //   async session({
-  //     session({session, token, user}) {
-  //       console.log(session)
-  //       session.user.username = session.user.name.split(" ").join("").toLocaleLowerCase();
-  //       return session;
-  //     }
-  //   });
-  // }
 });

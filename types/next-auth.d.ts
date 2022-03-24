@@ -1,4 +1,5 @@
-import { Session } from './../node_modules/next-auth/core/types.d';
+import type { JWT } from './../node_modules/next-auth/jwt/types.d';
+import type { Session, User } from './../node_modules/next-auth/core/types.d';
 import NextAuth from 'next-auth';
 
 declare module 'next-auth' {
@@ -7,10 +8,11 @@ declare module 'next-auth' {
    */
   interface Session {
     user: {
-      /** The user's postal address. */
-      address: string;
+      uid?: string;
+      username?: string;
+      name: string;
     };
   }
 }
 
-export { Session };
+export { Session, JWT, User };
