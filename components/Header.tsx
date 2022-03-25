@@ -10,11 +10,14 @@ import {
 } from '@heroicons/react/outline';
 import { HomeIcon } from '@heroicons/react/solid';
 import { signIn, signOut, useSession } from 'next-auth/react';
+import { useRecoilState } from 'recoil';
+import { modalState } from '../atoms/modalAtoms';
 
 export default function Header() {
   // 'data' comes back from 'useSession()' | rename to 'session'
   const { data: session } = useSession();
   const router = useRouter();
+  const [open, setOpen] = useRecoilState(modalState);
 
   return (
     <div className="sticky top-0 z-50 border-b bg-white shadow-sm">
@@ -23,7 +26,7 @@ export default function Header() {
         <div>
           <div
             onClick={() => router.push('/')}
-            className="relative hidden h-14 w-40 items-center lg:flex cursor-pointer"
+            className="relative hidden h-14 w-40 cursor-pointer items-center lg:flex"
           >
             <Image
               src="https://links.papareact.com/ocw"
