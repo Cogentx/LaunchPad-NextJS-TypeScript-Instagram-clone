@@ -11,6 +11,7 @@ export default function Suggestion({ username, avatar, company }: IProps) {
         src={avatar}
         alt=""
         className="h-10 w-10 rounded-full border p-[2px]"
+        referrerPolicy="no-referrer"
       />
       <div className="ml-4 flex-1">
         <h2 className="text-sm font-semibold">{username}</h2>

@@ -8,7 +8,8 @@ export default function MiniProfile() {
     <div className="mt-14 ml-10 flex items-center justify-between">
       <img
         src={session?.user?.image}
-        alt=""
+        alt="profile picture"
+        referrerPolicy="no-referrer"
         className="h-16 w-16 rounded-full border p-[2px]"
       />
       <div className="mx-4 flex-1">
@@ -16,7 +17,12 @@ export default function MiniProfile() {
         <h3 className="text-sm text-gray-400">Welcome to Instagram</h3>
       </div>
 
-      <button onClick={()=>signOut()} className="text-sm font-semibold text-blue-400">Sign Out</button>
+      <button
+        onClick={() => signOut()}
+        className="text-sm font-semibold text-blue-400"
+      >
+        Sign Out
+      </button>
     </div>
   );
 }

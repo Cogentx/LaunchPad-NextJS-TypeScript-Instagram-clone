@@ -19,6 +19,7 @@ export default function Post({ id, username, userImg, img, caption }: IPost) {
           src={userImg}
           alt=""
           className="mr-3 h-12 w-12 rounded-full border object-contain p-1"
+          referrerPolicy="no-referrer"
         />
         <p className="flex-1 font-bold">{username}</p>
         <DotsHorizontalIcon className="h-5" />
@@ -35,18 +36,21 @@ export default function Post({ id, username, userImg, img, caption }: IPost) {
         <BookmarkIcon className="btn" />
       </div>
       {/* Caption */}
-      <p className="p-5 truncate">
-        <span className='font-bold mr-1'>{username}</span>
+      <p className="truncate p-5">
+        <span className="mr-1 font-bold">{username}</span>
         {caption}
       </p>
       {/* Comments */}
 
       {/* Input Box */}
-      <form className='flex items-center p-4'>
-        <EmojiHappyIcon className='h-7'/>
-        <input type="text" placeholder='Add a comment...'
-        className='border-none flex-1 focus:ring-0 outline-none'/>
-        <button className='font-semibold text-blue-400'>Post</button>
+      <form className="flex items-center p-4">
+        <EmojiHappyIcon className="h-7" />
+        <input
+          type="text"
+          placeholder="Add a comment..."
+          className="flex-1 border-none outline-none focus:ring-0"
+        />
+        <button className="font-semibold text-blue-400">Post</button>
       </form>
     </article>
   );

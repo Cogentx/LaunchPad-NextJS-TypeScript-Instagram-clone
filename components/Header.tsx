@@ -73,6 +73,7 @@ export default function Header() {
                     className="h-10 w-10 cursor-pointer rounded-full"
                     src={session?.user?.image}
                     alt="profile pic"
+                    referrerPolicy="no-referrer"
                   />
                 )}
               </div>
