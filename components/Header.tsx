@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import {
   SearchIcon,
   PlusCircleIcon,
@@ -13,13 +14,17 @@ import { signIn, signOut, useSession } from 'next-auth/react';
 export default function Header() {
   // 'data' comes back from 'useSession()' | rename to 'session'
   const { data: session } = useSession();
+  const router = useRouter();
 
   return (
     <div className="sticky top-0 z-50 border-b bg-white shadow-sm">
       <div className="flex max-w-6xl items-center justify-between bg-white px-5 lg:mx-auto">
         {/* Left */}
         <div>
-          <div className="relative hidden h-14 w-40 items-center lg:flex">
+          <div
+            onClick={() => router.push('/')}
+            className="relative hidden h-14 w-40 items-center lg:flex cursor-pointer"
+          >
             <Image
               src="https://links.papareact.com/ocw"
               alt="Instagram Logo"
@@ -28,7 +33,10 @@ export default function Header() {
               priority
             />
           </div>
-          <div className="relative h-10 w-10 flex-shrink-0 cursor-pointer lg:hidden">
+          <div
+            onClick={() => router.push('/')}
+            className="relative h-10 w-10 flex-shrink-0 cursor-pointer lg:hidden"
+          >
             <Image
               src="https://links.papareact.com/jjm"
               alt="Instagram Logo"
@@ -52,7 +60,7 @@ export default function Header() {
         </div>
         {/* Right */}
         <div className="flex items-center justify-end space-x-4">
-          <HomeIcon className="navBtn" />
+          <HomeIcon onClick={() => router.push('/')} className="navBtn" />
           <MenuIcon className="h-6 cursor-pointer md:hidden" />
           {session ? (
             <>
