@@ -22,12 +22,12 @@ export default NextAuth({
   },
   callbacks: {
     async session({ session, token, user }: ISessionCallback) {
-      session.user.username = (!session?.user?.name) ? session.user.username : session?.user?.name
-        .split(' ')
-        .join('')
-        .toLocaleLowerCase();
+      // make username the user's name with all spaces removed
+      session.user.username = !session?.user?.name
+        ? session.user.username
+        : session?.user?.name.split(' ').join('').toLocaleLowerCase();
 
-      // attach Google UID (stored in token sub)
+      // attach Google UID (stored in token.sub | token is additional info from Google)
       session.user.uid = token.sub;
 
       return session;

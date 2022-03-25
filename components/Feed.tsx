@@ -20,7 +20,7 @@ export default function Feed() {
       </section>
 
       {session && (
-        <section className="hidden md:col-span-1 xl:inline-grid">
+        <section className="hidden xl:col-span-1 xl:inline-grid">
           <div className="fixed">
             <MiniProfile />
             <Suggestions />
