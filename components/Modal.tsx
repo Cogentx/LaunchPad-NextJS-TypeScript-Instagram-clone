@@ -5,7 +5,8 @@ import { modalState } from '../atoms/modalAtoms';
 
 export default function Modal() {
   const [open, setOpen] = useRecoilState(modalState);
-  const filePickerRef = useRef();
+  const filePickerRef = useRef(null);
+  const captionRef = useRef(null);
   const closeModal = () => setOpen(false);
   const addImageToPost = () => console.log('adding image to post...');
 
@@ -62,6 +63,14 @@ export default function Modal() {
                     type="file"
                     hidden
                     onChange={addImageToPost}
+                  />
+                </div>
+                <div className="mt-2">
+                  <input
+                    ref={captionRef}
+                    type="text"
+                    placeholder="Please enter a caption..."
+                    className="w-full border-none text-center focus:ring-0"
                   />
                 </div>
                 <div className="mt-5 sm:mt-6">
