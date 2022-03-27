@@ -77,12 +77,12 @@ export default function Header() {
               <UserGroupIcon className="navBtn" />
               <HeartIcon className="navBtn" />
               <div className="inline-flex space-x-3">
-                {session?.user?.image && (
+                {session?.user?.profileImg && (
                   // Next Image requires known image URLs
                   <img
                     onClick={() => signOut()}
                     className="h-10 w-10 cursor-pointer rounded-full"
-                    src={session?.user?.image}
+                    src={session?.user?.profileImg}
                     alt="profile pic"
                     referrerPolicy="no-referrer"
                   />
