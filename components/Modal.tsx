@@ -1,14 +1,21 @@
 import { Fragment, useRef, useState } from 'react';
 import { useRecoilState } from 'recoil';
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { useSession } from 'next-auth/react';
 import { Dialog, Transition } from '@headlessui/react';
-import { modalState } from '../atoms/modalAtoms';
 import { CameraIcon } from '@heroicons/react/outline';
+import { modalState } from '../atoms/modalAtoms';
+import { db, storage } from '../firebase';
+import { ref } from 'firebase/storage';
+import { IPost } from '../types/ig-clone';
 
 export default function Modal() {
   const [open, setOpen] = useRecoilState(modalState);
   const [selectedFile, setSelectedFile] = useState('');
-  const filePickerRef = useRef(null);
-  const captionRef = useRef(null);
+  const { data: session } = useSession();
+  const [loading, setLoading] = useState(false);
+  const filePickerRef = useRef<HTMLInputElement>(null);
+  const captionRef = useRef<HTMLInputElement>(null);
   const closeModal = () => setOpen(false);
   const addImageToPost = (e: any) => {
     const fileReader = new FileReader();
@@ -32,9 +39,46 @@ export default function Modal() {
       filePicker.click();
     }
   };
-  const updateLoadPost = () => {
-    console.log({ selectedFile });
-    console.log('caption', captionRef.current);
+  const uploadPost = async () => {
+    // if 'loading' do re-submit OR
+    // if user not currently logged in do not continue
+    if (loading || !session || !session.user) return;
+
+    setLoading(true);
+
+    const { name, username, profileImg } = session.user;
+    const caption = captionRef?.current?.value || '';
+
+    /* Firebase v9 Cloud Firestore document creation
+      - If no collection exists, it is created
+      - If no document exists, it is created
+      - If document exists, it is replaced (unless merge option specified)
+    */
+
+    // 1) Create a post and add to firestore 'posts' collection
+    // 2) Get the 'post id' for the newly created 'post'
+    // 3) Upload the image to Firebase Storage with the 'post id'
+    // 4) Get a DownloadURL from Firebase Storage and update the original 'post' with the image
+
+    try {
+      const postToAdd:IPost = {
+        name,
+        username,
+        caption,
+        profileImg,
+        timestamp: serverTimestamp(),
+      };
+
+      const docRef = await addDoc(collection(db, 'ig-posts'), {
+      });
+
+      console.log('New doc added with ID', docRef.id);
+
+      const imageRef = ref(storage);
+
+    } catch (error) {
+
+    }
   };
 
   return (
@@ -122,7 +166,7 @@ export default function Modal() {
                   </div>
                   <div className="mt-5 sm:mt-6">
                     <button
-                      onClick={updateLoadPost}
+                      onClick={uploadPost}
                       type="button"
                       className="inline-flex w-full justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:bg-gray-300 hover:disabled:bg-gray-300 sm:text-sm"
                     >

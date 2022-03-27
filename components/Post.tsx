@@ -1,4 +1,4 @@
-import type { IPost } from '../types/custom-types';
+import type { IPost } from '../types/ig-clone';
 import Image from 'next/image';
 import {
   BookmarkIcon,
@@ -10,13 +10,13 @@ import {
 } from '@heroicons/react/outline';
 import { HeartIcon as HeartFilledIcon } from '@heroicons/react/solid';
 
-export default function Post({ id, username, userImg, img, caption }: IPost) {
+export default function Post({ id, username, profileImg, postImg, caption }: IPost) {
   return (
     <article className="my-7 rounded-sm border bg-white">
       {/* header */}
       <div className="flex items-center p-3">
         <img
-          src={userImg}
+          src={profileImg}
           alt=""
           className="mr-3 h-12 w-12 rounded-full border object-contain p-1"
           referrerPolicy="no-referrer"
@@ -25,7 +25,7 @@ export default function Post({ id, username, userImg, img, caption }: IPost) {
         <DotsHorizontalIcon className="h-5" />
       </div>
       {/* Image */}
-      <img src={img} alt="post image" className="w-full object-cover" />
+      <img src={postImg} alt="post image" className="w-full object-cover" />
       {/* Buttons */}
       <div className="flex items-center justify-between px-5 pt-4">
         <div className="flex items-center space-x-4">
