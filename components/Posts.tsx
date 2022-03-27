@@ -7,7 +7,7 @@ export default function Posts() {
       id: '123',
       username: 'Ted Cogent',
       userImg: 'https://links.papareact.com/3ke',
-      img: 'https://links.papareact.com/3ke',
+      img: 'https://links.papareact.com/kxk',
       caption: 'This is Awesome!!!',
     },
     {
