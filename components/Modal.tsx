@@ -32,6 +32,10 @@ export default function Modal() {
       filePicker.click();
     }
   };
+  const updateLoadPost = () => {
+    console.log({ selectedFile });
+    console.log('caption', captionRef.current);
+  };
 
   return (
     <Transition appear show={open} as={Fragment}>
@@ -76,7 +80,7 @@ export default function Modal() {
                   <img
                     src={selectedFile}
                     alt="Selected File Preview"
-                    className="w-full object-contain cursor-pointer"
+                    className="w-full cursor-pointer object-contain"
                     onClick={() => setSelectedFile('')}
                   />
                 ) : (
@@ -118,6 +122,7 @@ export default function Modal() {
                   </div>
                   <div className="mt-5 sm:mt-6">
                     <button
+                      onClick={updateLoadPost}
                       type="button"
                       className="inline-flex w-full justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:bg-gray-300 hover:disabled:bg-gray-300 sm:text-sm"
                     >
