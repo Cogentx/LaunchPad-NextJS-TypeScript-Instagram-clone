@@ -6,11 +6,26 @@ import { CameraIcon } from '@heroicons/react/outline';
 
 export default function Modal() {
   const [open, setOpen] = useRecoilState(modalState);
-  const [selectedFile, setSelectedFile] = useState(null);
+  const [selectedFile, setSelectedFile] = useState('');
   const filePickerRef = useRef(null);
   const captionRef = useRef(null);
   const closeModal = () => setOpen(false);
-  const addImageToPost = (e: any) => console.log('adding image to post...', e);
+  const addImageToPost = (e: any) => {
+    const fileReader = new FileReader();
+    const file = e.target.files[0];
+
+    if (file) {
+      fileReader.readAsDataURL(file);
+
+      fileReader.onload = (readerEvent) => {
+        if (readerEvent.target) {
+          const fileLocal = readerEvent.target.result as string;
+
+          setSelectedFile(fileLocal);
+        }
+      };
+    }
+  };
   const handleCameraClick = () => {
     if (filePickerRef.current) {
       const filePicker = filePickerRef.current as HTMLInputElement;
@@ -57,15 +72,25 @@ export default function Modal() {
           >
             <div className="inline-block w-full max-w-md transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left align-bottom shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:align-middle">
               <div>
-                <div
-                  onClick={handleCameraClick}
-                  className="mx-auto flex h-12 w-12 cursor-pointer items-center justify-center rounded-full bg-red-100"
-                >
-                  <CameraIcon
-                    aria-hidden="true"
-                    className="h-6 w-6 text-red-600"
+                {selectedFile ? (
+                  <img
+                    src={selectedFile}
+                    alt="Selected File Preview"
+                    className="w-full object-contain cursor-pointer"
+                    onClick={() => setSelectedFile('')}
                   />
-                </div>
+                ) : (
+                  <div
+                    onClick={handleCameraClick}
+                    className="mx-auto flex h-12 w-12 cursor-pointer items-center justify-center rounded-full bg-red-100"
+                  >
+                    <CameraIcon
+                      aria-hidden="true"
+                      className="h-6 w-6 text-red-600"
+                    />
+                  </div>
+                )}
+
                 <div>
                   <div className="mt-3 text-center sm:mt-5">
                     <Dialog.Title
