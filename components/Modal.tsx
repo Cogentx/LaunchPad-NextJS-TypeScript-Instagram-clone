@@ -1,18 +1,24 @@
 import { Fragment, useRef, useState } from 'react';
 import { useRecoilState } from 'recoil';
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import {
+  addDoc,
+  collection,
+  getDoc,
+  serverTimestamp,
+  updateDoc,
+} from 'firebase/firestore';
 import { useSession } from 'next-auth/react';
 import { Dialog, Transition } from '@headlessui/react';
 import { CameraIcon } from '@heroicons/react/outline';
 import { modalState } from '../atoms/modalAtoms';
-import { db, storage } from '../firebase';
-import { ref } from 'firebase/storage';
+import { db, ig_posts_url, storage } from '../firebase';
+import { getDownloadURL, ref, uploadString } from 'firebase/storage';
 import { IPost } from '../types/ig-clone';
 
 export default function Modal() {
-  const [open, setOpen] = useRecoilState(modalState);
-  const [selectedFile, setSelectedFile] = useState('');
   const { data: session } = useSession();
+  const [open, setOpen] = useRecoilState(modalState);
+  const [imageToPost, setImageToPost] = useState('');
   const [loading, setLoading] = useState(false);
   const filePickerRef = useRef<HTMLInputElement>(null);
   const captionRef = useRef<HTMLInputElement>(null);
@@ -28,7 +34,7 @@ export default function Modal() {
         if (readerEvent.target) {
           const fileLocal = readerEvent.target.result as string;
 
-          setSelectedFile(fileLocal);
+          setImageToPost(fileLocal);
         }
       };
     }
@@ -39,6 +45,7 @@ export default function Modal() {
       filePicker.click();
     }
   };
+  const resetImageToPost = () => setImageToPost('');
   const uploadPost = async () => {
     // if 'loading' do re-submit OR
     // if user not currently logged in do not continue
@@ -61,7 +68,7 @@ export default function Modal() {
     // 4) Get a DownloadURL from Firebase Storage and update the original 'post' with the image
 
     try {
-      const postToAdd:IPost = {
+      const postToAdd: IPost = {
         name,
         username,
         caption,
@@ -69,15 +76,36 @@ export default function Modal() {
         timestamp: serverTimestamp(),
       };
 
-      const docRef = await addDoc(collection(db, 'ig-posts'), {
-      });
+      const docRef = await addDoc(collection(db, ig_posts_url), postToAdd);
+      const doc = await getDoc(docRef);
 
-      console.log('New doc added with ID', docRef.id);
+      // if post successfully added to Cloud Firestore and there is an image to upload
+      if (doc.exists() && imageToPost) {
+        const storageRef = ref(storage, `${ig_posts_url}/${doc.id}`);
 
-      const imageRef = ref(storage);
+        // imageToPost is a 'string' type of 'data_url' (base64 encoded image)
+        // this type matches (data_url) how file is read in above 'fileReader.readAsDataURL(file)'
+        const uploadResult = await uploadString(
+          storageRef,
+          imageToPost as string,
+          'data_url'
+        );
 
+        const downloadURL = await getDownloadURL(uploadResult.ref);
+
+        // CAUTION: if NOT using 'updateDoc', set {MERGE: TRUE} when updating otherwise it will simply replace current Document and all current data will be lost.
+        // 'updateDoc' will MERGE by default!!!
+        updateDoc(docRef, {
+          postImg: downloadURL,
+        });
+
+        // Reset Loading and Modal States
+        setLoading(false);
+        setOpen(false);
+        resetImageToPost();
+      }
     } catch (error) {
-
+      console.log('ModalComp: error adding post', error);
     }
   };
 
@@ -120,12 +148,12 @@ export default function Modal() {
           >
             <div className="inline-block w-full max-w-md transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left align-bottom shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:align-middle">
               <div>
-                {selectedFile ? (
+                {imageToPost ? (
                   <img
-                    src={selectedFile}
+                    src={imageToPost}
                     alt="Selected File Preview"
                     className="w-full cursor-pointer object-contain"
-                    onClick={() => setSelectedFile('')}
+                    onClick={resetImageToPost}
                   />
                 ) : (
                   <div
