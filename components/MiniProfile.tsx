@@ -7,7 +7,7 @@ export default function MiniProfile() {
   return (
     <div className="mt-14 ml-10 flex items-center justify-between">
       <img
-        src={session?.user?.profileImg}
+        src={session?.user?.image}
         alt="profile picture"
         referrerPolicy="no-referrer"
         className="h-16 w-16 rounded-full border p-[2px]"
