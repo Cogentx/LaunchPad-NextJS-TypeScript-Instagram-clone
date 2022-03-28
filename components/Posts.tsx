@@ -9,13 +9,9 @@ export default function Posts() {
   const [posts, setPosts] = useState<Array<QueryDocumentSnapshot<DocumentData>>>([]);
 
   // run 'loadPosts' code before Component is first
-  useEffect(() => {
-    // store FireStore's 'unSubscribe' function to turn off realtime listener
-    // ...and return the function to be called when Component is destroyed
-    const unSubscribe = loadPosts();
-
-    return unSubscribe;
-  }, []);
+  // use FireStore's 'unSubscribe' function to turn off realtime listener
+  // ... return the function from useEffect to be called when Component is destroyed
+  useEffect(() => loadPosts(), []);
 
   const loadPosts = () => {
     // setup realtime listener on 'post' data in FireStore
@@ -30,14 +26,14 @@ export default function Posts() {
 
   return (
     <section>
-      {posts.map((post: IPost) => (
+      {posts.map((post: QueryDocumentSnapshot<DocumentData>) => (
         <Post
           key={post.id}
           id={post.id}
-          username={post.username}
-          profileImg={post.profileImg}
-          postImg={post.postImg}
-          caption={post.caption}
+          username={post.data().username}
+          profileImg={post.data().profileImg}
+          postImg={post.data().postImg}
+          caption={post.data().caption}
         />
       ))}
     </section>
