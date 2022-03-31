@@ -22,9 +22,14 @@ export default function Post({
   const [comments, setComments] = useState([]);
   const [comment, setComment] = useState('');
 
-  const sendComment = (e) => {
+  const sendComment = async (e: HTMLFormElement) => {
     e.preventDefault();
-    console.log('comments sent!');
+
+    // create copy of comment to UI input can be cleared instantly
+    const commentToSend = comment;
+    setComment('');
+
+    console.log('comments sent!', { commentToSend });
   };
 
   return (
