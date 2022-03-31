@@ -1,5 +1,4 @@
 import type { IPost } from '../types/ig-clone';
-import Image from 'next/image';
 import {
   BookmarkIcon,
   ChatIcon,
@@ -9,8 +8,17 @@ import {
   PaperAirplaneIcon,
 } from '@heroicons/react/outline';
 import { HeartIcon as HeartFilledIcon } from '@heroicons/react/solid';
+import { useSession } from 'next-auth/react';
 
-export default function Post({ id, username, profileImg, postImg, caption }: IPost) {
+export default function Post({
+  id,
+  username,
+  profileImg,
+  postImg,
+  caption,
+}: IPost) {
+  const { data: session } = useSession();
+
   return (
     <article className="my-7 rounded-sm border bg-white">
       {/* header */}
@@ -27,14 +35,16 @@ export default function Post({ id, username, profileImg, postImg, caption }: IPo
       {/* Image */}
       <img src={postImg} alt="post image" className="w-full object-cover" />
       {/* Buttons */}
-      <div className="flex items-center justify-between px-5 pt-4">
-        <div className="flex items-center space-x-4">
-          <HeartIcon className="btn" />
-          <ChatIcon className="btn" />
-          <PaperAirplaneIcon className="btn" />
+      {session && session.user && (
+        <div className="flex items-center justify-between px-5 pt-4">
+          <div className="flex items-center space-x-4">
+            <HeartIcon className="btn" />
+            <ChatIcon className="btn" />
+            <PaperAirplaneIcon className="btn" />
+          </div>
+          <BookmarkIcon className="btn" />
         </div>
-        <BookmarkIcon className="btn" />
-      </div>
+      )}
       {/* Caption */}
       <p className="truncate p-5">
         <span className="mr-1 font-bold">{username}</span>
@@ -43,15 +53,17 @@ export default function Post({ id, username, profileImg, postImg, caption }: IPo
       {/* Comments */}
 
       {/* Input Box */}
-      <form className="flex items-center p-4">
-        <EmojiHappyIcon className="h-7" />
-        <input
-          type="text"
-          placeholder="Add a comment..."
-          className="flex-1 border-none outline-none focus:ring-0"
-        />
-        <button className="font-semibold text-blue-400">Post</button>
-      </form>
+      {session && session.user && (
+        <form className="flex items-center p-4">
+          <EmojiHappyIcon className="h-7" />
+          <input
+            type="text"
+            placeholder="Add a comment..."
+            className="flex-1 border-none outline-none focus:ring-0"
+          />
+          <button className="font-semibold text-blue-400">Post</button>
+        </form>
+      )}
     </article>
   );
 }
