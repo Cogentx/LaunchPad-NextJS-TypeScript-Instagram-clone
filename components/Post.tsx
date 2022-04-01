@@ -21,6 +21,7 @@ import {
   serverTimestamp,
 } from 'firebase/firestore';
 import { db, ig_comments_url, ig_posts_url } from '../firebase';
+import CommentRow from './CommentRow';
 
 export default function Post({
   id,
@@ -67,7 +68,6 @@ export default function Post({
       return onSnapshot(q, (snapshot) => setComments(snapshot.docs));
     } catch (error) {
       console.log(error);
-
     }
   };
 
@@ -105,11 +105,12 @@ export default function Post({
         {caption}
       </p>
       {/* Comments */}
-      {comments.length && comments.map((comment: QueryDocumentSnapshot<DocumentData>) => (
-        <div key={comment.id}>
-          <h3>{comment.data().comment}</h3>
+      {comments.length > 0 && (
+        <div className="ml-10 h-20 overflow-y-scroll scrollbar-thin scrollbar-thumb-black">
+          {comments.map((comment: QueryDocumentSnapshot<DocumentData>) => (
+            <CommentRow key={comment.id} postComment={comment.data()} />
+          ))}
         </div>
-      )
       )}
 
       {/* Input Box */}
