@@ -21,7 +21,6 @@ import {
   serverTimestamp,
 } from 'firebase/firestore';
 import { db, ig_comments_url, ig_posts_url } from '../firebase';
-import { Snapshot } from 'recoil';
 
 export default function Post({
   id,
@@ -42,7 +41,7 @@ export default function Post({
     postId,
     ig_comments_url
   );
-  const sendComment = async (e: HTMLFormElement) => {
+  const sendComment = async (e: any) => {
     e.preventDefault();
 
     // create copy of comment to UI input can be cleared instantly
@@ -66,7 +65,10 @@ export default function Post({
     try {
       const q = query(commentCollectionRef, orderBy('timestamp', 'desc'));
       return onSnapshot(q, (snapshot) => setComments(snapshot.docs));
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+
+    }
   };
 
   useEffect(() => loadComments(), []);
@@ -103,6 +105,12 @@ export default function Post({
         {caption}
       </p>
       {/* Comments */}
+      {comments.length && comments.map((comment: QueryDocumentSnapshot<DocumentData>) => (
+        <div key={comment.id}>
+          <h3>{comment.data().comment}</h3>
+        </div>
+      )
+      )}
 
       {/* Input Box */}
       {session && session.user && (
