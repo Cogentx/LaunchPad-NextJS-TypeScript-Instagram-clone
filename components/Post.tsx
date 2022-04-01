@@ -1,4 +1,4 @@
-import type { IPost } from '../types/ig-clone';
+import type { IComment, IPost } from '../types/ig-clone';
 import {
   BookmarkIcon,
   ChatIcon,
@@ -9,7 +9,19 @@ import {
 } from '@heroicons/react/outline';
 import { HeartIcon as HeartFilledIcon } from '@heroicons/react/solid';
 import { useSession } from 'next-auth/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import {
+  addDoc,
+  collection,
+  DocumentData,
+  onSnapshot,
+  orderBy,
+  query,
+  QueryDocumentSnapshot,
+  serverTimestamp,
+} from 'firebase/firestore';
+import { db, ig_comments_url, ig_posts_url } from '../firebase';
+import { Snapshot } from 'recoil';
 
 export default function Post({
   id,
@@ -19,9 +31,17 @@ export default function Post({
   caption,
 }: IPost) {
   const { data: session } = useSession();
-  const [comments, setComments] = useState([]);
+  const [comments, setComments] = useState<
+    Array<QueryDocumentSnapshot<DocumentData>>
+  >([]);
   const [comment, setComment] = useState('');
-
+  const postId = id as string;
+  const commentCollectionRef = collection(
+    db,
+    ig_posts_url,
+    postId,
+    ig_comments_url
+  );
   const sendComment = async (e: HTMLFormElement) => {
     e.preventDefault();
 
@@ -29,8 +49,27 @@ export default function Post({
     const commentToSend = comment;
     setComment('');
 
-    console.log('comments sent!', { commentToSend });
+    try {
+      const commentToAdd: IComment = {
+        comment: commentToSend,
+        username: session?.user.username,
+        profileImg: session?.user.image,
+        timestamp: serverTimestamp(),
+      };
+
+      await addDoc(commentCollectionRef, commentToAdd);
+    } catch (error) {
+      console.log('ModalComp: error adding post', error);
+    }
   };
+  const loadComments = () => {
+    try {
+      const q = query(commentCollectionRef, orderBy('timestamp', 'desc'));
+      return onSnapshot(q, (snapshot) => setComments(snapshot.docs));
+    } catch (error) {}
+  };
+
+  useEffect(() => loadComments(), []);
 
   return (
     <article className="my-7 rounded-sm border bg-white">
