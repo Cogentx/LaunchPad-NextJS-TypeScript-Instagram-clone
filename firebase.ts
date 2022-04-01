@@ -21,5 +21,6 @@ const storage = getStorage(app);
 
 // Firebase related constants
 const ig_posts_url = 'ig-posts';
+const ig_comments_url = 'ig-comments';
 
-export { db, storage, ig_posts_url };
+export { db, storage, ig_posts_url, ig_comments_url };

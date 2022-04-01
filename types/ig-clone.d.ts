@@ -10,4 +10,11 @@ interface IPost {
   postImg?: string;
 }
 
-export { IPost };
+interface IComment {
+  comment?: string;
+  username?: string;
+  profileImg?: string;
+  timestamp?: FieldValue<Timestamp>;
+}
+
+export { IPost, IComment };

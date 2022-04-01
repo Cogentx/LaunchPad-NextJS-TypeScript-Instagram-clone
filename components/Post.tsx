@@ -1,4 +1,4 @@
-import type { IPost } from '../types/ig-clone';
+import type { IComment, IPost } from '../types/ig-clone';
 import {
   BookmarkIcon,
   ChatIcon,
@@ -9,6 +9,19 @@ import {
 } from '@heroicons/react/outline';
 import { HeartIcon as HeartFilledIcon } from '@heroicons/react/solid';
 import { useSession } from 'next-auth/react';
+import { useEffect, useState } from 'react';
+import {
+  addDoc,
+  collection,
+  DocumentData,
+  onSnapshot,
+  orderBy,
+  query,
+  QueryDocumentSnapshot,
+  serverTimestamp,
+} from 'firebase/firestore';
+import { db, ig_comments_url, ig_posts_url } from '../firebase';
+import CommentRow from './CommentRow';
 
 export default function Post({
   id,
@@ -18,6 +31,47 @@ export default function Post({
   caption,
 }: IPost) {
   const { data: session } = useSession();
+  const [comments, setComments] = useState<
+    Array<QueryDocumentSnapshot<DocumentData>>
+  >([]);
+  const [comment, setComment] = useState('');
+  const postId = id as string;
+  const commentCollectionRef = collection(
+    db,
+    ig_posts_url,
+    postId,
+    ig_comments_url
+  );
+  const sendComment = async (e: any) => {
+    e.preventDefault();
+
+    // create copy of comment to UI input can be cleared instantly
+    const commentToSend = comment;
+    setComment('');
+
+    try {
+      const commentToAdd: IComment = {
+        comment: commentToSend,
+        username: session?.user.username,
+        profileImg: session?.user.image,
+        timestamp: serverTimestamp(),
+      };
+
+      await addDoc(commentCollectionRef, commentToAdd);
+    } catch (error) {
+      console.log('ModalComp: error adding post', error);
+    }
+  };
+  const loadComments = () => {
+    try {
+      const q = query(commentCollectionRef, orderBy('timestamp', 'desc'));
+      return onSnapshot(q, (snapshot) => setComments(snapshot.docs));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => loadComments(), []);
 
   return (
     <article className="my-7 rounded-sm border bg-white">
@@ -51,6 +105,13 @@ export default function Post({
         {caption}
       </p>
       {/* Comments */}
+      {comments.length > 0 && (
+        <div className="ml-10 h-20 overflow-y-scroll scrollbar-thin scrollbar-thumb-black">
+          {comments.map((comment: QueryDocumentSnapshot<DocumentData>) => (
+            <CommentRow key={comment.id} postComment={comment.data()} />
+          ))}
+        </div>
+      )}
 
       {/* Input Box */}
       {session && session.user && (
@@ -58,10 +119,19 @@ export default function Post({
           <EmojiHappyIcon className="h-7" />
           <input
             type="text"
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
             placeholder="Add a comment..."
             className="flex-1 border-none outline-none focus:ring-0"
           />
-          <button className="font-semibold text-blue-400">Post</button>
+          <button
+            onClick={sendComment}
+            type="submit"
+            disabled={!comment.trim()}
+            className="font-semibold text-blue-400"
+          >
+            Post
+          </button>
         </form>
       )}
     </article>
