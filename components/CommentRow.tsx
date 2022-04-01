@@ -1,4 +1,4 @@
-import React from 'react';
+import Moment from 'react-moment';
 import { IComment } from '../types/ig-clone';
 
 type IProps = {
@@ -6,7 +6,7 @@ type IProps = {
 };
 
 export default function CommentRow({ postComment }: IProps) {
-  const { comment, profileImg, username } = postComment;
+  const { comment, profileImg, username, timestamp } = postComment;
   return (
     <div className="mb-3 flex items-center space-x-2">
       <img
@@ -18,6 +18,7 @@ export default function CommentRow({ postComment }: IProps) {
       <p className="flex-1 text-sm">
         <span className="font-bold">{username}</span> {comment}
       </p>
+      <Moment interval={600} className='pr-5 text-xs' fromNow>{timestamp?.toDate()}</Moment>
     </div>
   );
 }
