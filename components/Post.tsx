@@ -13,6 +13,7 @@ import { useEffect, useState } from 'react';
 import {
   addDoc,
   collection,
+  deleteDoc,
   doc,
   DocumentData,
   onSnapshot,
@@ -40,6 +41,7 @@ export default function Post({
   const [likes, setLikes] = useState<
     Array<QueryDocumentSnapshot<DocumentData>>
   >([]);
+  const [hasLikedPost, setHasLikedPost] = useState(false);
   const postId = id as string;
   const commentCollectionRef = collection(
     db,
@@ -75,14 +77,38 @@ export default function Post({
       console.log(error);
     }
   };
+  const handleLikePost = async () => {
+    if (hasLikedPost) {
+      unlikePost();
+    } else {
+      likePost();
+    }
+  };
   const likePost = async () => {
     const userId = session?.user.uid as string;
     const username = session?.user.username as string;
-    await setDoc(
-      doc(db, ig_posts_url, postId, ig_likes_url, userId), {
+    const likesDoc = doc(db, ig_posts_url, postId, ig_likes_url, userId);
+    try {
+      await setDoc(likesDoc, {
         username,
-      }
-    );
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const unlikePost = async () => {
+    const userId = session?.user.uid as string;
+    const likesDoc = doc(db, ig_posts_url, postId, ig_likes_url, userId);
+    try {
+      await deleteDoc(likesDoc);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const checkHasLikedPost = () => {
+    const userId = session?.user.uid as string;
+    // 'findIndex' returns 'index' if found; -1 if not found
+    setHasLikedPost(likes.findIndex((like) => like.id === userId) !== -1);
   };
   const loadPostLikes = () => {
     try {
@@ -95,10 +121,12 @@ export default function Post({
 
   useEffect(() => loadPostComments(), []);
   useEffect(() => loadPostLikes(), []);
+  useEffect(() => checkHasLikedPost(), [likes]);
 
   return (
     <article className="my-7 rounded-sm border bg-white">
       {/* header */}
+
       <div className="flex items-center p-3">
         <img
           src={profileImg}
@@ -109,24 +137,32 @@ export default function Post({
         <p className="flex-1 font-bold">{username}</p>
         <DotsHorizontalIcon className="h-5" />
       </div>
+
       {/* Image */}
       <img src={postImg} alt="post image" className="w-full object-cover" />
+
       {/* Buttons */}
       {session && session.user && (
         <div className="flex items-center justify-between px-5 pt-4">
           <div className="flex items-center space-x-4">
-            <HeartIcon className="btn" />
+            {hasLikedPost ? (
+              <HeartFilledIcon className="btn text-red-500" onClick={handleLikePost} />
+            ) : (
+              <HeartIcon className="btn" onClick={handleLikePost} />
+            )}
             <ChatIcon className="btn" />
             <PaperAirplaneIcon className="btn" />
           </div>
           <BookmarkIcon className="btn" />
         </div>
       )}
+
       {/* Caption */}
       <p className="truncate p-5">
         <span className="mr-1 font-bold">{username}</span>
         {caption}
       </p>
+
       {/* Comments */}
       {comments.length > 0 && (
         <div className="ml-10 h-20 overflow-y-scroll scrollbar-thin scrollbar-thumb-black">
