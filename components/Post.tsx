@@ -13,14 +13,16 @@ import { useEffect, useState } from 'react';
 import {
   addDoc,
   collection,
+  doc,
   DocumentData,
   onSnapshot,
   orderBy,
   query,
   QueryDocumentSnapshot,
   serverTimestamp,
+  setDoc,
 } from 'firebase/firestore';
-import { db, ig_comments_url, ig_posts_url } from '../firebase';
+import { db, ig_comments_url, ig_likes_url, ig_posts_url } from '../firebase';
 import CommentRow from './CommentRow';
 
 export default function Post({
@@ -31,10 +33,13 @@ export default function Post({
   caption,
 }: IPost) {
   const { data: session } = useSession();
+  const [comment, setComment] = useState('');
   const [comments, setComments] = useState<
     Array<QueryDocumentSnapshot<DocumentData>>
   >([]);
-  const [comment, setComment] = useState('');
+  const [likes, setLikes] = useState<
+    Array<QueryDocumentSnapshot<DocumentData>>
+  >([]);
   const postId = id as string;
   const commentCollectionRef = collection(
     db,
@@ -42,7 +47,7 @@ export default function Post({
     postId,
     ig_comments_url
   );
-  const sendComment = async (e: any) => {
+  const postComment = async (e: any) => {
     e.preventDefault();
 
     // create copy of comment to UI input can be cleared instantly
@@ -62,7 +67,7 @@ export default function Post({
       console.log('ModalComp: error adding post', error);
     }
   };
-  const loadComments = () => {
+  const loadPostComments = () => {
     try {
       const q = query(commentCollectionRef, orderBy('timestamp', 'desc'));
       return onSnapshot(q, (snapshot) => setComments(snapshot.docs));
@@ -70,8 +75,26 @@ export default function Post({
       console.log(error);
     }
   };
+  const likePost = async () => {
+    const userId = session?.user.uid as string;
+    const username = session?.user.username as string;
+    await setDoc(
+      doc(db, ig_posts_url, postId, ig_likes_url, userId), {
+        username,
+      }
+    );
+  };
+  const loadPostLikes = () => {
+    try {
+      const q = query(collection(db, ig_posts_url, postId, ig_likes_url));
+      return onSnapshot(q, (snapshot) => setLikes(snapshot.docs));
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-  useEffect(() => loadComments(), []);
+  useEffect(() => loadPostComments(), []);
+  useEffect(() => loadPostLikes(), []);
 
   return (
     <article className="my-7 rounded-sm border bg-white">
@@ -125,7 +148,7 @@ export default function Post({
             className="flex-1 border-none outline-none focus:ring-0"
           />
           <button
-            onClick={sendComment}
+            onClick={postComment}
             type="submit"
             disabled={!comment.trim()}
             className="font-semibold text-blue-400"
