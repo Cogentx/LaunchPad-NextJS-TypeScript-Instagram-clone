@@ -146,7 +146,10 @@ export default function Post({
         <div className="flex items-center justify-between px-5 pt-4">
           <div className="flex items-center space-x-4">
             {hasLikedPost ? (
-              <HeartFilledIcon className="btn text-red-500" onClick={handleLikePost} />
+              <HeartFilledIcon
+                className="btn text-red-500"
+                onClick={handleLikePost}
+              />
             ) : (
               <HeartIcon className="btn" onClick={handleLikePost} />
             )}
@@ -159,6 +162,11 @@ export default function Post({
 
       {/* Caption */}
       <p className="truncate p-5">
+        {likes.length > 0 && (
+          <p className="font-bold mb-1">
+            {likes.length} {likes.length === 1 ? 'like' : 'likes'}
+          </p>
+        )}
         <span className="mr-1 font-bold">{username}</span>
         {caption}
       </p>
