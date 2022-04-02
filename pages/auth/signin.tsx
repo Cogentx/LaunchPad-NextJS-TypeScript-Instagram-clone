@@ -15,7 +15,7 @@ export default function SignIn({ providers }: IProps) {
   return (
     <>
       <Header />
-      <div className="flex flex-col items-center justify-center py-2 px-14 min-h-screen -mt-56">
+      <div className="mt-20 flex min-h-screen flex-col items-center py-2 px-14">
         <div className="relative flex h-28 w-80 items-center">
           <Image
             src="https://links.papareact.com/ocw"
@@ -36,7 +36,9 @@ export default function SignIn({ providers }: IProps) {
               {/* signIntoProvider takes a callbackUrl as second param | '/' goes to Home Page */}
               <button
                 className="rounded-lg bg-blue-500 p-3 text-white"
-                onClick={() => signIntoProvider(provider.id,{callbackUrl:'/'})}
+                onClick={() =>
+                  signIntoProvider(provider.id, { callbackUrl: '/' })
+                }
               >
                 Sign in with {provider.name}
               </button>
