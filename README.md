@@ -1,4 +1,4 @@
-# Next.js + TypeScript + Tailwind CSS + Firebase v9 Modular
+# Next.js + TypeScript + Tailwind CSS + Firebase v9 Modular + Recoil
 
 ## Instagram clone
 
