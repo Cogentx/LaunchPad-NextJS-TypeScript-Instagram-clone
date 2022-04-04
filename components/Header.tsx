@@ -29,7 +29,7 @@ export default function Header() {
             className="relative hidden h-14 w-40 cursor-pointer items-center lg:flex"
           >
             <Image
-              src="https://links.papareact.com/ocw"
+              src="/Instagram Full Logo.png"
               alt="Instagram Logo"
               layout="fill"
               objectFit="contain"
@@ -41,7 +41,7 @@ export default function Header() {
             className="relative h-10 w-10 flex-shrink-0 cursor-pointer lg:hidden"
           >
             <Image
-              src="https://links.papareact.com/jjm"
+              src="/Instagram Full Small.png"
               alt="Instagram Logo"
               layout="fill"
               objectFit="contain"
@@ -73,7 +73,10 @@ export default function Header() {
                   3
                 </div>
               </div>
-              <PlusCircleIcon onClick={()=>setOpen(true)} className="navBtn" />
+              <PlusCircleIcon
+                onClick={() => setOpen(true)}
+                className="navBtn"
+              />
               <UserGroupIcon className="navBtn" />
               <HeartIcon className="navBtn" />
               <div className="inline-flex space-x-3">

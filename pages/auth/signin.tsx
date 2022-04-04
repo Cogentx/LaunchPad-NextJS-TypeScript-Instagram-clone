@@ -18,7 +18,7 @@ export default function SignIn({ providers }: IProps) {
       <div className="mt-20 flex min-h-screen flex-col items-center py-2 px-14">
         <div className="relative flex h-28 w-80 items-center">
           <Image
-            src="https://links.papareact.com/ocw"
+            src="/Instagram Full Logo.png"
             alt="Instagram Logo"
             layout="fill"
             objectFit="contain"
