@@ -41,7 +41,7 @@ export default function Header() {
             className="relative h-10 w-10 flex-shrink-0 cursor-pointer lg:hidden"
           >
             <Image
-              src="/Instagram Full Small.png"
+              src="/Instagram Small Logo.png"
               alt="Instagram Logo"
               layout="fill"
               objectFit="contain"
