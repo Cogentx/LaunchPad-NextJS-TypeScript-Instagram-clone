@@ -46,26 +46,33 @@ export default function Modal() {
     }
   };
   const resetImageToPost = () => setImageToPost('');
+
+  /** uploadPost
+   * How Firestore behaves...
+   *  Firebase v9 Cloud Firestore document creation
+   *   - If no collection exists, it is created
+   *   - If no document exists, it is created
+   *   - If document exists, it is replaced (unless merge option specified)
+   *
+   * Pre-run Checks for Function:
+   * 1) if 'loading' do re-submit OR
+   * 2) if user not currently logged in do not continue
+   *
+   * How it works...
+   * 1) Create a post and add to firestore 'posts' collection
+   * 2) Get the 'post id' for the newly created 'post'
+   * 3) Upload the image to Firebase Storage with the 'post id'
+   * 4) Get a DownloadURL from Firebase Storage and update the original 'post' with the image
+   *
+   * @returns void
+   */
   const uploadPost = async () => {
-    // if 'loading' do re-submit OR
-    // if user not currently logged in do not continue
     if (loading || !session || !session.user) return;
 
     setLoading(true);
 
     const { name, username, image: profileImg } = session.user;
     const caption = captionRef?.current?.value || '';
-
-    /* Firebase v9 Cloud Firestore document creation
-      - If no collection exists, it is created
-      - If no document exists, it is created
-      - If document exists, it is replaced (unless merge option specified)
-    */
-
-    // 1) Create a post and add to firestore 'posts' collection
-    // 2) Get the 'post id' for the newly created 'post'
-    // 3) Upload the image to Firebase Storage with the 'post id'
-    // 4) Get a DownloadURL from Firebase Storage and update the original 'post' with the image
 
     try {
       const postToAdd: IPost = {
