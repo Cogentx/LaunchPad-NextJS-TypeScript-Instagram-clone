@@ -77,7 +77,7 @@ export default function Post({
       console.log(error);
     }
   };
-  const handleLikePost = async () => {
+  const handleLikePost = () => {
     if (hasLikedPost) {
       unlikePost();
     } else {
@@ -87,9 +87,9 @@ export default function Post({
   const likePost = async () => {
     const userId = session?.user.uid as string;
     const username = session?.user.username as string;
-    const likesDoc = doc(db, ig_posts_url, postId, ig_likes_url, userId);
+    const likesDocRef = doc(db, ig_posts_url, postId, ig_likes_url, userId);
     try {
-      await setDoc(likesDoc, {
+      await setDoc(likesDocRef, {
         username,
       });
     } catch (error) {

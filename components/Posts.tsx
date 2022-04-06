@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { collection, DocumentData, onSnapshot, orderBy, query, QueryDocumentSnapshot } from 'firebase/firestore';
 import Post from './Post';
 import { db, ig_posts_url } from '../firebase';
-import type { IPost } from '../types/ig-clone';
 
 export default function Posts() {
   // without using React-Firebase-Hooks
